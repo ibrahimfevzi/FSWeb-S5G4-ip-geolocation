@@ -132,4 +132,4 @@ async function setCardData() {
 }
 
 setCardData();
-//Görevler tamamlandı.
+//Görevler tamamlandı...
