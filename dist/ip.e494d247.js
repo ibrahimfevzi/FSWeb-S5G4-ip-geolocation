@@ -13444,10 +13444,11 @@ function ipAdresimiAl() {
 /*
 	ADIM 1: axios kullanarak, aşağıdaki URL'ye GET sorgusu atacağız
     (tag içindeki yere kendi ipnizi yazarak URL'yi oluşturun):
-    https://apis.ergineer.com/ipgeoapi/<ipniz>
+    https://apis.ergineer.com/ipgeoapi/<176.33.68.46>
 	
 	NOT: Bilgisayarın IP adresini öğrenmek için: https://apis.ergineer.com/ipadresim 
 	ADIM 5'e gelene kadar fonksiyonunuzu test etmek için ip nizi URL'ye manuel olarak ekleyebilirsiniz.
+	
 */
 /*
 	ADIM 2: Geri döndürülen verileri inceleyin, bu sizin ip bilgileriniz! Bileşen fonksiyonunuzu geliştirmek içindeki bu veri yapısını
@@ -13475,14 +13476,6 @@ function ipAdresimiAl() {
 	ADIM 4: API'den alınan verileri kullanarak ADIM 3'te verilen yapıda bir kart oluşturun ve 
 	bu kartı DOM olarak .cards elementinin içine ekleyin. 
 */
-/*
-	ADIM 5: Manuel olarak eklediğiniz IP adresini dinamiğe dönüştürün. 
-	Sayfanın en üstünde ---değiştirmeyin--- etiketleri arasında yer alan asenkron ipAdresimiAl() fonksiyonuna 
-	sorgu atarak bilgisayarınız IP adresini dinamik olarak aldıracaksınız. Bu fonksiyon asenkron olarak çağırıldığında `benimIP` değişkenine 
-	bilgisayarınızın IP adresini atayacaktır. 
-	Örnek dinamik URL kullanımı: var url = "https://apis.ergineer.com/ipgeoapi/"+benimIP; 
-*/
-//kodlar buraya gelecek
 function _ipAdresimiAl() {
   _ipAdresimiAl = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -13505,6 +13498,79 @@ function _ipAdresimiAl() {
   }));
   return _ipAdresimiAl.apply(this, arguments);
 }
+var cardYapici = function cardYapici(data) {
+  var card = document.createElement("div");
+  card.classList.add("card");
+  var bayrak = document.createElement("img");
+  bayrak.setAttribute("src", data.ülkebayrağı);
+  card.append(bayrak);
+  var cardInfo = document.createElement("div");
+  cardInfo.classList.add("card-info");
+  card.append(cardInfo);
+  var baslik = document.createElement("h3");
+  baslik.classList.add("ip");
+  baslik.textContent = "IP: ".concat(data.sorgu);
+  cardInfo.append(baslik);
+  var ulkeBilgisi = document.createElement("p");
+  ulkeBilgisi.classList.add("ulke");
+  ulkeBilgisi.textContent = "".concat(data.ülke, " (").concat(data.ülkeKodu, ")");
+  cardInfo.append(ulkeBilgisi);
+  var enBoy = document.createElement("p");
+  enBoy.textContent = "Enlem: ".concat(data.enlem, " Boylam: ").concat(data.boylam);
+  cardInfo.append(enBoy);
+  var sehirBilgi = document.createElement("p");
+  sehirBilgi.textContent = "\u015Eehir: ".concat(data.şehir);
+  cardInfo.append(sehirBilgi);
+  var saatDilimi = document.createElement("p");
+  saatDilimi.textContent = "Saat dilimi: ".concat(data.saatdilimi);
+  cardInfo.append(saatDilimi);
+  var paraBirimi = document.createElement("p");
+  paraBirimi.textContent = "Para birimi: ".concat(data.parabirimi);
+  cardInfo.append(paraBirimi);
+  var ispBilgi = document.createElement("p");
+  ispBilgi.textContent = "ISP: ".concat(data.isp);
+  cardInfo.append(ispBilgi);
+  cardContainer.append(card);
+};
+var cardContainer = document.querySelector(".cards");
+
+/*
+	ADIM 5: Manuel olarak eklediğiniz IP adresini dinamiğe dönüştürün. 
+	Sayfanın en üstünde ---değiştirmeyin--- etiketleri arasında yer alan asenkron ipAdresimiAl() fonksiyonuna 
+	sorgu atarak bilgisayarınız IP adresini dinamik olarak aldıracaksınız. Bu fonksiyon asenkron olarak çağırıldığında `benimIP` değişkenine 
+	bilgisayarınızın IP adresini atayacaktır. 
+	Örnek dinamik URL kullanımı: var url = "https://apis.ergineer.com/ipgeoapi/"+benimIP; 
+*/
+
+//kodlar buraya gelecek
+function setCardData() {
+  return _setCardData.apply(this, arguments);
+}
+function _setCardData() {
+  _setCardData = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.next = 2;
+          return ipAdresimiAl();
+        case 2:
+          _axios.default.get("https://apis.ergineer.com/ipgeoapi/".concat(benimIP)).then(function (response) {
+            // handle success
+            console.log(response);
+            cardContainer.append(cardYapici(response.data));
+          }).catch(function (error) {
+            // handle error
+            console.log(error);
+          });
+        case 3:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2);
+  }));
+  return _setCardData.apply(this, arguments);
+}
+setCardData();
 },{"axios":"node_modules/axios/index.js","babel-core/register":"node_modules/babel-core/register.js","babel-polyfill":"node_modules/babel-polyfill/lib/index.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -13530,7 +13596,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60239" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52318" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

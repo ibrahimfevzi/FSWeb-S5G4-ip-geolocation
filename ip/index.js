@@ -24,10 +24,11 @@ async function ipAdresimiAl() {
 /*
 	ADIM 1: axios kullanarak, aşağıdaki URL'ye GET sorgusu atacağız
     (tag içindeki yere kendi ipnizi yazarak URL'yi oluşturun):
-    https://apis.ergineer.com/ipgeoapi/<ipniz>
+    https://apis.ergineer.com/ipgeoapi/<176.33.68.46>
 	
 	NOT: Bilgisayarın IP adresini öğrenmek için: https://apis.ergineer.com/ipadresim 
 	ADIM 5'e gelene kadar fonksiyonunuzu test etmek için ip nizi URL'ye manuel olarak ekleyebilirsiniz.
+	
 */
 
 /*
@@ -57,6 +58,52 @@ async function ipAdresimiAl() {
 	ADIM 4: API'den alınan verileri kullanarak ADIM 3'te verilen yapıda bir kart oluşturun ve 
 	bu kartı DOM olarak .cards elementinin içine ekleyin. 
 */
+const cardYapici = (data) => {
+  const card = document.createElement("div");
+  card.classList.add("card");
+
+  const bayrak = document.createElement("img");
+  bayrak.setAttribute("src", data.ülkebayrağı);
+  card.append(bayrak);
+
+  const cardInfo = document.createElement("div");
+  cardInfo.classList.add("card-info");
+  card.append(cardInfo);
+
+  const baslik = document.createElement("h3");
+  baslik.classList.add("ip");
+  baslik.textContent = `IP: ${data.sorgu}`;
+  cardInfo.append(baslik);
+
+  const ulkeBilgisi = document.createElement("p");
+  ulkeBilgisi.classList.add("ulke");
+  ulkeBilgisi.textContent = `${data.ülke} (${data.ülkeKodu})`;
+  cardInfo.append(ulkeBilgisi);
+
+  const enBoy = document.createElement("p");
+  enBoy.textContent = `Enlem: ${data.enlem} Boylam: ${data.boylam}`;
+  cardInfo.append(enBoy);
+
+  const sehirBilgi = document.createElement("p");
+  sehirBilgi.textContent = `Şehir: ${data.şehir}`;
+  cardInfo.append(sehirBilgi);
+
+  const saatDilimi = document.createElement("p");
+  saatDilimi.textContent = `Saat dilimi: ${data.saatdilimi}`;
+  cardInfo.append(saatDilimi);
+
+  const paraBirimi = document.createElement("p");
+  paraBirimi.textContent = `Para birimi: ${data.parabirimi}`;
+  cardInfo.append(paraBirimi);
+
+  const ispBilgi = document.createElement("p");
+  ispBilgi.textContent = `ISP: ${data.isp}`;
+  cardInfo.append(ispBilgi);
+
+  cardContainer.append(card);
+};
+
+const cardContainer = document.querySelector(".cards");
 
 /*
 	ADIM 5: Manuel olarak eklediğiniz IP adresini dinamiğe dönüştürün. 
@@ -67,3 +114,21 @@ async function ipAdresimiAl() {
 */
 
 //kodlar buraya gelecek
+
+async function setCardData() {
+  await ipAdresimiAl();
+
+  axios
+    .get(`https://apis.ergineer.com/ipgeoapi/${benimIP}`)
+    .then(function (response) {
+      // handle success
+      console.log(response);
+      cardContainer.append(cardYapici(response.data));
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    });
+}
+
+setCardData();
